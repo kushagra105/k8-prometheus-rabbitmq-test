@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prom-rabbitmq-metrics
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+      app: prom-rabbitmq-metrics
+  template:
+    metadata:
+      labels:
+        app: prom-rabbitmq-metrics
+    spec:
+      containers:
+      - name: prometheus
+        image: kbudde/rabbitmq-exporter:v0.29.0
+        env:
+        - name: RABBIT_URL
+          value: http://10.52.7.167:15672
+        - name: RABBIT_USER
+          value: user
+        - name: RABBIT_PASSWORD
+          value: Rabbit_test
+        - name: PUBLISH_PORT
+          value: "9419"
+        # amqp 3.6.9++
+        - name: RABBIT_CAPABILITIES
+          value: "bert,no_sort"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi

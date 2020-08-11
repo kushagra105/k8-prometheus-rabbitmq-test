@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: rabbit-prom-cm
+data:
+    url: http://10.52.7.167:15672
+    user: user
+    port: "9419"

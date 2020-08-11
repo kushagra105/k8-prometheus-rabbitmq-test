@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prom-rabbitmq
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+      app: prom-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: prom-rabbitmq
+    spec:
+      containers:
+      - name: prometheus
+        image: kbudde/rabbitmq-exporter:v0.29.0
+        env:
+        - name: RABBIT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-prom-cm
+              key: url
+        - name: RABBIT_USER
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-prom-cm
+              key: user
+        - name: RABBIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rabbit-prom-s
+              key: password
+        - name: PUBLISH_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-prom-cm
+              key: port
+        # amqp 3.6.9++
+        - name: RABBIT_CAPABILITIES
+          value: "bert,no_sort"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
