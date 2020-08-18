@@ -17,7 +17,7 @@ spec:
         image: kbudde/rabbitmq-exporter:v0.29.0
         env:
         - name: RABBIT_URL
-          value: http://10.52.7.167:15672
+          value: http://10.193.4.109:15672
         - name: RABBIT_USER
           value: user
         - name: RABBIT_PASSWORD

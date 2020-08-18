@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prom-rabbitmq-service
+  labels:
+    app: prom-rabbitmq-sm
+spec:
+  type: ClusterIP
+  selector:
+    app: prom-rabbitmq-metrics
+  ports:
+  - name: custom
+    protocol: TCP
+    port: 9419
+    targetPort: 9419

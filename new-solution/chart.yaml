@@ -1,0 +1,22 @@
+prometheus:
+  url: http://10.193.13.51
+  port: 9090
+
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+
+service:
+  port: 443
+
+logLevel: 6
+rules:
+  default: false
+  custom:
+  - seriesQuery: 'rabbitmq_queue_messages{namespace!=""}'
+    resources:
+      overrides:
+        namespace: {resource: "namespace"}
+    metricsQuery: sum(<<.Series>>{<<.LabelMatchers>>,queue="testqueue"}) by (<<.GroupBy>>)

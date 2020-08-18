@@ -1,19 +1,22 @@
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: workers-hpa-2
+  name: rabbitmq-server-scaling-demo-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1beta1
+    apiVersion: extensions/v1beta1
     kind: Deployment
     name: php-apache
   minReplicas: 1
   maxReplicas: 10
   metrics:
-  - type: External
-    external:
-      metricName: 'rabbitmq_queue_messages_ready'
-      metricSelector:
-        matchLabels:
-          metric.labels.queue: testqueue
-      targetValue: 10
+  - type: Object
+    object:
+      metric:
+        name: rabbitmq_queue_messages
+      describedObject:
+        kind: Namespace
+        name: rabbit
+      target:
+        type: Value
+        value: 3
